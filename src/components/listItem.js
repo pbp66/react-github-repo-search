@@ -25,7 +25,7 @@ const ListItem = ({ repo, saved = false, toggleSaved }) => {
           </a>
         </div>
         {description}<br/>
-        <span className="badge bg-primary rounded-pill">
+        <span className="badge bg-success rounded-pill">
           <i className="bi bi-star-fill"></i> {stargazers_count}
         </span>
       </div>
