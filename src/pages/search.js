@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import Container from '../components/container'
 import SearchForm from '../components/searchForm'
 import Spinner from '../components/spinner'
+import List from '../components/list'
+import ListItem from '../components/listItem'
 import API from '../utils/api'
 
 const SearchPage = () => {
@@ -25,6 +27,10 @@ const SearchPage = () => {
     }
   }
 
+  const toggleSaved = repo => {
+    console.log('Toggle saved', repo)
+  }
+
   return (
     <Container className="mt-3">
       <h1>Search Github Repos: <span className="badge bg-secondary">{term}</span></h1>
@@ -35,9 +41,21 @@ const SearchPage = () => {
         handleSubmit={searchRepos}
       />
 
+      <br />
+
       {loading 
         ? <Spinner /> 
-        : <pre>{JSON.stringify(repos, null, 2)}</pre>}
+        : <List>
+            {repos.map(repo => (
+              <ListItem 
+                repo={repo}
+                saved={false}
+                toggleSaved={toggleSaved}
+                key={repo.id}
+              />
+            ))}
+          </List>
+      }
 
     </Container>
   )
