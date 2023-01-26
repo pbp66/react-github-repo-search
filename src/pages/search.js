@@ -1,5 +1,7 @@
+import Container from "../components/container";
+
 const SearchPage = (props) => {
-	return "SearchPage";
+	return <Container>Test</Container>;
 };
 
 export default SearchPage;
