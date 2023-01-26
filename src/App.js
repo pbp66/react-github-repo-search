@@ -19,7 +19,10 @@ function App() {
 
 	return (
 		<>
-			<Navbar />
+			<Navbar
+				view={view}
+				setView={setView}
+			/>
 			{renderView()}
 		</>
 	);
