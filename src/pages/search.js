@@ -5,12 +5,17 @@ import Spinner from '../components/spinner'
 import List from '../components/list'
 import ListItem from '../components/listItem'
 import API from '../utils/api'
+import { lsKey } from '../utils/constants'
 
 const SearchPage = () => {
   const [term, setTerm] = useState('React')
   const [loading, setLoading] = useState(false)
   const [repos, setRepos] = useState([])
   const [savedRepos, setSavedRepos] = useState([])
+
+  useEffect(() => {
+    loadSavedRepos()
+  }, [])
 
   const searchRepos = async () => {
     if (term) {
@@ -27,8 +32,24 @@ const SearchPage = () => {
     }
   }
 
+  const loadSavedRepos = () => {
+    const lsRepos = JSON.parse(localStorage.getItem(lsKey)) || []
+    setSavedRepos(lsRepos)
+  }
+
   const toggleSaved = repo => {
-    console.log('Toggle saved', repo)
+    const foundRepo = savedRepos.find(savedRepo => savedRepo.id === repo.id)
+    
+    let updatedSavedRepos
+    if (foundRepo) {
+      // remove the repo from localStorage
+      updatedSavedRepos = savedRepos.filter(savedRepo => savedRepo.id !== repo.id)
+    } else {
+      // add repo to localStorage
+      updatedSavedRepos = [...savedRepos, repo]
+    }
+    localStorage.setItem(lsKey, JSON.stringify(updatedSavedRepos))
+    loadSavedRepos()
   }
 
   return (
@@ -46,14 +67,17 @@ const SearchPage = () => {
       {loading 
         ? <Spinner /> 
         : <List>
-            {repos.map(repo => (
-              <ListItem 
-                repo={repo}
-                saved={false}
-                toggleSaved={toggleSaved}
-                key={repo.id}
-              />
-            ))}
+            {repos.map(repo => {
+              const foundRepo = savedRepos.find(savedRepo => savedRepo.id === repo.id)
+              return (
+                <ListItem 
+                  repo={repo}
+                  saved={foundRepo}
+                  toggleSaved={toggleSaved}
+                  key={repo.id}
+                />
+              )
+            })}
           </List>
       }
 
